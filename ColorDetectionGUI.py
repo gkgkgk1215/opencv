@@ -53,39 +53,40 @@ class ColorDetector(QDialog):
 
     def start_webcam(self):
         self.capture = cv2.VideoCapture(0)
-        self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
-        self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
+        # self.capture.set(cv2.CAP_PROP_FRAME_HEIGHT, 360)
+        # self.capture.set(cv2.CAP_PROP_FRAME_WIDTH, 480)
 
         self.timer = QTimer(self)
         self.timer.timeout.connect(self.update_frame)
         self.timer.start(5)
 
     def update_frame(self):
-        ret, self.image = self.capture.read()
-        self.image = cv2.flip(self.image, 1)
-        self.displayImage(self.image, 1)
-
-        # Reference
-        # lower = {'red':(166, 84, 141), 'green':(66, 122, 129), 'blue':(97, 100, 117), 'yellow':(23, 59, 119), 'orange':(0, 50, 80)} #assign new item lower['blue'] = (93, 10, 0)
-        # upper = {'red':(186,255,255), 'green':(86,255,255), 'blue':(117,255,255), 'yellow':(54,255,255), 'orange':(20,255,255)}
-
-        hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
-
-        color_lower = np.array([self.h_min.value(), self.s_min.value(), self.v_min.value()], np.uint8)
-        color_upper = np.array([self.h_max.value(), self.s_max.value(), self.v_max.value()], np.uint8)
-
-        self.current_value.setText('Current Value -> Min :' + str(color_lower) + ' Max: ' + str(color_upper))
-
-        # print('Min :'+str(color_lower)+' Max: '+str(color_upper))
-        color_mask = cv2.inRange(hsv, color_lower, color_upper)
-
-        self.displayImage(color_mask, 2)
-
-        if (self.track_enabled and self.color_1.isChecked()):
-            trackedImage = self.track_colored_object(self.image.copy())
-            self.displayImage(trackedImage, 1)
-        else:
+        if self.capture.isOpened():
+            ret, self.image = self.capture.read()
+            self.image = cv2.flip(self.image, 1)
             self.displayImage(self.image, 1)
+
+            # Reference
+            # lower = {'red':(166, 84, 141), 'green':(66, 122, 129), 'blue':(97, 100, 117), 'yellow':(23, 59, 119), 'orange':(0, 50, 80)} #assign new item lower['blue'] = (93, 10, 0)
+            # upper = {'red':(186,255,255), 'green':(86,255,255), 'blue':(117,255,255), 'yellow':(54,255,255), 'orange':(20,255,255)}
+
+            hsv = cv2.cvtColor(self.image, cv2.COLOR_BGR2HSV)
+
+            color_lower = np.array([self.h_min.value(), self.s_min.value(), self.v_min.value()], np.uint8)
+            color_upper = np.array([self.h_max.value(), self.s_max.value(), self.v_max.value()], np.uint8)
+
+            self.current_value.setText('Current Value -> Min :' + str(color_lower) + ' Max: ' + str(color_upper))
+
+            # print('Min :'+str(color_lower)+' Max: '+str(color_upper))
+            color_mask = cv2.inRange(hsv, color_lower, color_upper)
+
+            self.displayImage(color_mask, 2)
+
+            if (self.track_enabled and self.color_1.isChecked()):
+                trackedImage = self.track_colored_object(self.image.copy())
+                self.displayImage(trackedImage, 1)
+            else:
+                self.displayImage(self.image, 1)
 
     def track_colored_object(self, img):
         blur = cv2.blur(img, (3, 3))

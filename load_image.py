@@ -2,7 +2,7 @@ import numpy as np
 import cv2
 
 # Load an image
-img = cv2.imread("example_images/dgist.jpg", cv2.IMREAD_COLOR)
+img = cv2.imread("example_images/dgist_logo.jpg", cv2.IMREAD_COLOR)
 
 # Method1: show using OpenCV
 cv2.imshow('DGIST Logo', img)   # show the image

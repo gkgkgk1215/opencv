@@ -5,7 +5,7 @@ img = np.zeros((512, 512, 3), np.uint8)
 
 # drawing lines with various color and thickness
 # BGR: Blue-Green-Red order
-cv2.line(img, (0, 0), (400, 100), (255, 0, 0), 5)
+cv2.line(img=img,pt1=(0, 0), pt2=(400, 100), color=(255, 0, 0), thickness=5)
 # cv2.triangle()
 cv2.rectangle(img, (384, 0), (510, 128), (0, 255, 0), 3)
 cv2.circle(img, (447, 63), 63, (0, 0, 255), -1)

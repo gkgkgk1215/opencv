@@ -1,6 +1,6 @@
 import cv2
-
 img = cv2.imread("example_images/kitten.jpg")
+
 cv2.imshow("original image", img)
 cv2.waitKey(0)
 

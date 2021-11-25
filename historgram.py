@@ -1,4 +1,3 @@
-import numpy as np
 import cv2
 from matplotlib import pyplot as plt
 
@@ -13,7 +12,6 @@ hist = cv2.calcHist(images=[img_gray], channels=[0], mask=None, histSize=[256], 
 # Plot the histogram using matplotlib
 plt.plot(hist)
 plt.show()
-
 
 # Histogram Equalization
 img_eq = cv2.equalizeHist(img_gray)

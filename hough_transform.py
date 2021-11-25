@@ -33,24 +33,24 @@ cv2.waitKey(0)
 cv2.destroyAllWindows()
 
 
-# """
-# Searching circles
-# """
-# img1 = cv2.imread("example_images/coins.jpg")
-# img2 = img1.copy()
-#
-# img2 = cv2.GaussianBlur(img2, (3,3), 0)
-# img_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
-#
-# circles = cv2.HoughCircles(img_gray, cv2.HOUGH_GRADIENT, dp=1, minDist=10, param1=60, param2=50, minRadius=0, maxRadius=0)
-#
-# if circles is not None:
-#     circles = np.uint16(np.around(circles))
-#     for i in circles[0, :]:
-#         cv2.circle(img1, (i[0], i[1]), i[2], (255, 255, 0), 5 )
-#
-#         cv2.imshow("Hough Circles", img1)
-#         cv2.waitKey(0)
-#         cv2.destroyAllWindows()
-# else:
-#     print ("Could not find circle")
+"""
+Searching circles
+"""
+img1 = cv2.imread("example_images/coins.jpg")
+img2 = img1.copy()
+
+img2 = cv2.GaussianBlur(img2, (3,3), 0)
+img_gray = cv2.cvtColor(img2, cv2.COLOR_BGR2GRAY)
+
+circles = cv2.HoughCircles(img_gray, cv2.HOUGH_GRADIENT, dp=1, minDist=10, param1=60, param2=50, minRadius=0, maxRadius=0)
+
+if circles is not None:
+    circles = np.uint16(np.around(circles))
+    for i in circles[0, :]:
+        cv2.circle(img1, (i[0], i[1]), i[2], (255, 255, 0), 5 )
+
+        cv2.imshow("Hough Circles", img1)
+        cv2.waitKey(0)
+        cv2.destroyAllWindows()
+else:
+    print ("Could not find circle")

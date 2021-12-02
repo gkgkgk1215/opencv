@@ -1,6 +1,5 @@
 import numpy as np
 import cv2
-from aruco_generator import ARUCO_DICT
 
 # define names of each possible ArUco tag OpenCV supports
 ARUCO_DICT = {
@@ -27,34 +26,59 @@ ARUCO_DICT = {
     "DICT_APRILTAG_36h11": cv2.aruco.DICT_APRILTAG_36h11
 }
 
+
+def drawCube(img, imgpts):
+    imgpts = np.int32(imgpts).reshape(-1, 2)
+    cv2.drawContours(img, [imgpts[:4]], -1, (255, 0, 0), -3)
+
+    for i, j in zip(range(4), range(4, 8)):
+        cv2.line(img, tuple(imgpts[i]), tuple(imgpts[j]), (0, 255, 0), 2)
+
+    cv2.drawContours(img, [imgpts[4:]], -1, (0, 255, 0), 2)
+    return img.copy()
+
+row = 9
+col = 13
+markerSize = 29.0  # mm
+K = np.load('camera_intrinsics/K.npy')
+D = np.load('camera_intrinsics/D.npy')
+
+# prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
+objp = np.float32([[0, 0],[markerSize, 0],[markerSize, markerSize],[0, markerSize]])
+
+# cube vertex
+L = markerSize
+axis = np.float32([[-L/2, -L/2, 0], [-L/2, L/2, 0], [L/2, L/2, 0], [L/2, -L/2, 0],
+                   [-L/2, -L/2, -L], [-L/2, L/2, -L], [L/2, L/2, -L], [L/2, -L/2, -L]])
+
 # Load aruco dictionary
 type = "DICT_6X6_50"
 arucoDict = cv2.aruco.Dictionary_get(ARUCO_DICT[type])
 
-# Grab the ArUCo parameters
-arucoParams = cv2.aruco.DetectorParameters_create()
+# Grab camera capture, ArUCo parameters, and camera intrinsics
 cam = cv2.VideoCapture(0)
+arucoParams = cv2.aruco.DetectorParameters_create()
 while True:
     # Read frame from camera
     ret, frame = cam.read()
-    frame = cv2.flip(frame, 1)
     gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
     corners, ids, rejected = cv2.aruco.detectMarkers(image=gray, dictionary=arucoDict, parameters=arucoParams)
-
-    # import pdb; pdb.set_trace()
     if corners:
-        # Display
         for corner, id in zip(corners, ids):
-            corner = corner[0]
-            for pt in corner:
-                cv2.circle(img=frame, center=pt.astype(int), radius=5, color=(0, 255, 0), thickness=-1)
-            center = (corner[0]+corner[2])/2
-            cv2.putText(img=frame, text=str(id), org=center.astype(int)+np.array([0, 90]), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 0), thickness=2, lineType=cv2.LINE_AA)
+            # draw corners, ids
+            center = (corner[0][0] + corner[0][2]) / 2
+            cv2.putText(img=frame, text=str(id), org=center.astype(int) + np.array([0, 90]),
+                        fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 0), thickness=2,
+                        lineType=cv2.LINE_AA)
+            # detect pose
+            rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(corners=corner.astype(np.float64), markerLength=L,
+                                                                  cameraMatrix=K, distCoeffs=D)
+            # draw axis
+            (rvecs - tvecs).any()  # get rid of that nasty numpy value array error
+            cv2.aruco.drawDetectedMarkers(frame, corners)  # Draw A square around the markers
+            cv2.aruco.drawAxis(frame, K, D, rvecs, tvecs, 30)  # Draw axis
+
     cv2.imshow("Detected result", frame)
     key = cv2.waitKey(1) & 0xFF
     if key == ord('q'):
         break
-
-# K = np.load('camera_intrinsics/K.npy')
-# D = np.load('camera_intrinsics/D.npy')
-# rvecs, tvecs, _ = cv2.aruco.estimatePoseSingleMarkers(corners=corners[0].astype(np.float64), markerLength=0.10, cameraMatrix=K, distCoeffs=D)

@@ -492,7 +492,7 @@ def moment():
     for key, val in mmt.items():
         print ('%s:\t%.5f' %(key,val))
 
-    # center of moment
+    # center of tutorials
     cx = int(mmt['m10']/mmt['m00'])
     cy = int(mmt['m01']/mmt['m00'])
     print(cx, cy)
@@ -1001,7 +1001,7 @@ if __name__ == "__main__":
     # thresholding()
     # bluring_filtering()
     # bluring()
-    # moment()
+    # tutorials()
     # convex()
     # contour()
     # contour_adv()

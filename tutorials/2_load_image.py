@@ -18,3 +18,6 @@ from matplotlib import pyplot as plt
 img_rgb = cv2.cvtColor(img, cv2.COLOR_BGR2RGB)
 plt.imshow(img_rgb)
 plt.show()
+
+# Write an image
+cv2.imwrite("2_new_img.jpg", img)

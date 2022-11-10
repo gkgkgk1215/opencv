@@ -2,7 +2,7 @@ import cv2
 from matplotlib import pyplot as plt
 
 img = cv2.imread('example_images/dgist_building.jpg', cv2.IMREAD_GRAYSCALE)
-threshold = 127
+threshold = 50
 ret1, thr1 = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY)
 ret2, thr2 = cv2.threshold(img, threshold, 255, cv2.THRESH_BINARY_INV)
 ret3, thr3 = cv2.threshold(img, threshold, 255, cv2.THRESH_TRUNC)

@@ -40,8 +40,8 @@ def drawCube(img, imgpts):
 row = 9
 col = 13
 markerSize = 29.0  # mm
-K = np.load('camera_intrinsics/K.npy')
-D = np.load('camera_intrinsics/D.npy')
+K = np.load('../camera_calibration/camera_intrinsics/K.npy')
+D = np.load('../camera_calibration/camera_intrinsics/D.npy')
 
 # prepare object points, like (0,0,0), (1,0,0), (2,0,0) ....,(6,5,0)
 objp = np.float32([[0, 0],[markerSize, 0],[markerSize, markerSize],[0, markerSize]])

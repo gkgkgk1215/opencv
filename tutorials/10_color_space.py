@@ -18,4 +18,3 @@ saturation = img_hsv[:, :, 1]
 value = img_hsv[:, :, 2]
 cv2.imshow("Hue", hue)
 cv2.waitKey(0)
-

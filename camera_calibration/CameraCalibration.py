@@ -1,10 +1,11 @@
 import cv2
 import numpy as np
+from OV9750 import OV9750
 
 # grid information
-row = 9
-col = 13
-grid_size = 136/10  # mm
+row = 6
+col = 9
+grid_size = 12.5  # mm
 
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
@@ -18,10 +19,14 @@ objp = objp*grid_size
 objpoints = []  # 3d point in real world space
 imgpoints = []  # 2d points in image plane.
 
-cam = cv2.VideoCapture(0)
+# cam = cv2.VideoCapture(0)
+cam = OV9750()
+
 while True:
     # Read frame from camera
-    ret, frame = cam.read()
+    # ret, frame = cam.read()
+    img_L, img_R = cam.get_frame()
+    frame = img_R
     cv2.imshow("camera frame", frame)
 
     # Key input

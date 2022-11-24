@@ -27,7 +27,7 @@ ARUCO_DICT = {
 }
 
 # load the input image from disk and resize it
-image = cv2.imread("robot_base.png")
+image = cv2.imread("../example_images/robot_base.png")
 
 # Load aruco dictionary
 type = "DICT_6X6_50"
@@ -44,6 +44,11 @@ for corner, id in zip(corners, ids):
         cv2.circle(img=image, center=pt.astype(int), radius=5, color=(0, 255, 0), thickness=-1)
     center = (corner[0]+corner[2])/2
     cv2.putText(img=image, text=str(id), org=center.astype(int)+np.array([0, 90]), fontFace=cv2.FONT_HERSHEY_SIMPLEX, fontScale=1, color=(255, 0, 0), thickness=2, lineType=cv2.LINE_AA)
+
+for rej in rejected:
+    rej = rej[0]
+    for pt in rej:
+        cv2.circle(img=image, center=pt.astype(int), radius=5, color=(0, 255, 0), thickness=-1)
 
 cv2.imshow("Detected result", image)
 cv2.waitKey(0)

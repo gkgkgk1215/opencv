@@ -14,8 +14,8 @@ def drawCube(img, imgpts):
 row = 9
 col = 13
 grid_size = 136/10  # mm
-mtx = np.load('../camera_calibration/camera_intrinsics/K.npy')
-dist = np.load('../camera_calibration/camera_intrinsics/D.npy')
+mtx = np.load('../../camera_calibration/camera_intrinsics/K.npy')
+dist = np.load('../../camera_calibration/camera_intrinsics/D.npy')
 
 # termination criteria
 criteria = (cv2.TERM_CRITERIA_EPS + cv2.TERM_CRITERIA_MAX_ITER, 30, 0.001)
